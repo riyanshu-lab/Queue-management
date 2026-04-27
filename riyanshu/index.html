@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QueueFlow | Smarter Queue Management</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config & Custom Styles -->
+    <script src="tailwind-config.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+
+    <!-- Initial Theme Setup Script to prevent flash -->
+    <script>
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 transition-colors duration-300">
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-blue-600 flex items-center justify-center text-white font-bold">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight">QueueFlow</span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Features</a>
+                    <a href="#how-it-works" class="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">How it Works</a>
+                    <a href="#demo" class="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Live Demo</a>
+                    <a href="#pricing" class="text-sm font-medium text-slate-600 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-500 transition-colors">Pricing</a>
+                </div>
+
+                <!-- Actions -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
+                        <i id="theme-toggle-dark-icon" data-lucide="moon" class="hidden w-5 h-5"></i>
+                        <i id="theme-toggle-light-icon" data-lucide="sun" class="hidden w-5 h-5"></i>
+                    </button>
+                    <a href="#" class="text-sm font-medium text-slate-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Log in</a>
+                    <a href="#" class="px-5 py-2.5 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200 rounded-full transition-all shadow-sm hover:shadow-md">Get Started</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="theme-toggle-mobile" class="p-2 text-slate-500 dark:text-slate-400">
+                        <i data-lucide="sun" class="w-5 h-5 dark:hidden"></i>
+                        <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-1 sm:px-3 flex flex-col">
+                <a href="#features" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Features</a>
+                <a href="#how-it-works" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">How it Works</a>
+                <a href="#demo" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Live Demo</a>
+                <a href="#pricing" class="block px-3 py-3 rounded-md text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800">Pricing</a>
+                <div class="pt-4 flex flex-col gap-3">
+                    <a href="#" class="w-full text-center px-5 py-3 text-base font-medium text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800">Log in</a>
+                    <a href="#" class="w-full text-center px-5 py-3 text-base font-medium text-white bg-brand-600 hover:bg-brand-700 rounded-lg shadow-sm">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <!-- Background Effects -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full z-0 pointer-events-none">
+            <div class="absolute top-20 -left-20 w-72 h-72 bg-brand-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob dark:mix-blend-screen dark:opacity-20"></div>
+            <div class="absolute top-20 -right-20 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 dark:mix-blend-screen dark:opacity-20"></div>
+            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000 dark:mix-blend-screen dark:opacity-20"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 text-sm font-medium mb-8 border border-brand-100 dark:border-brand-500/20">
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                QueueFlow 2.0 is now live
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 text-slate-900 dark:text-white max-w-4xl mx-auto leading-tight">
+                Smarter Queue Management for <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-blue-600 dark:from-brand-400 dark:to-blue-400">Modern Events</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                Eliminate physical lines and enhance user experience. Real-time tracking, smart predictions, and instant notifications—all in one elegant platform.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-slate-900 dark:bg-white dark:text-slate-900 rounded-full hover:scale-105 hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
+                    Start for free <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+                <a href="#demo" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
+                    <i data-lucide="play-circle" class="w-5 h-5"></i> Book a Demo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-20 reveal">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-xl dark:shadow-2xl dark:shadow-brand-900/10 border border-slate-100 dark:border-slate-800 p-8 md:p-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-100 dark:divide-slate-800">
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">10M+</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Users Queued</p>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">99.9%</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Uptime SLA</p>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">45m</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Avg. Time Saved</p>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">500+</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Events Managed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-white dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-sm font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mb-2">Platform Features</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Everything you need to manage crowds effortlessly.</h3>
+                <p class="text-lg text-slate-600 dark:text-slate-400">Our intelligent infrastructure handles the heavy lifting, so you can focus on delivering an exceptional experience.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 reveal group">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-slate-700 group-hover:bg-brand-50 dark:group-hover:bg-brand-900/30 transition-colors">
+                        <i data-lucide="clock" class="w-6 h-6 text-brand-600 dark:text-brand-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Smart Wait Time Prediction</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Our AI analyzes historical data and real-time throughput to provide accurate wait time estimates to your customers.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 reveal group" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-slate-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 transition-colors">
+                        <i data-lucide="bell-ring" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Instant Notifications</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Send SMS, Push, or WhatsApp alerts when it's almost their turn, preventing no-shows and keeping users engaged.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 reveal group" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-slate-700 group-hover:bg-purple-50 dark:group-hover:bg-purple-900/30 transition-colors">
+                        <i data-lucide="smartphone" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Seamless User Experience</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">No app download required. Users simply scan a QR code to join the queue and track their progress via web browser.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 reveal group">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-slate-700 group-hover:bg-pink-50 dark:group-hover:bg-pink-900/30 transition-colors">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-pink-600 dark:text-pink-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Real-time Analytics</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Gain insights into peak hours, staff performance, and customer drop-off rates through our comprehensive dashboard.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 reveal group" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-slate-700 group-hover:bg-orange-50 dark:group-hover:bg-orange-900/30 transition-colors">
+                        <i data-lucide="users" class="w-6 h-6 text-orange-600 dark:text-orange-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Multi-Queue Management</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Manage multiple lines, stalls, or services simultaneously from a single unified control center.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 hover:-translate-y-2 hover:shadow-xl transition-all duration-300 reveal group" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-slate-100 dark:border-slate-700 group-hover:bg-green-50 dark:group-hover:bg-green-900/30 transition-colors">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Enterprise Security</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Bank-grade encryption, GDPR compliance, and strict access controls keep your operational data safe and secure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 bg-slate-50 dark:bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">How it works in practice</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400">A frictionless journey from scanning a code to getting served.</p>
+            </div>
+
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gradient-to-r from-brand-100 via-blue-200 to-purple-100 dark:from-brand-900 dark:via-blue-900 dark:to-purple-900 -translate-y-1/2 z-0"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center text-center reveal">
+                        <div class="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border-4 border-slate-50 dark:border-slate-900 shadow-xl flex items-center justify-center mb-6 relative">
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center">1</span>
+                            <i data-lucide="qr-code" class="w-6 h-6 text-slate-700 dark:text-slate-300"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Scan & Join</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Customer scans a QR code at your venue to instantly view the virtual queue.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center text-center reveal" style="transition-delay: 150ms;">
+                        <div class="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border-4 border-slate-50 dark:border-slate-900 shadow-xl flex items-center justify-center mb-6 relative">
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center">2</span>
+                            <i data-lucide="ticket" class="w-6 h-6 text-slate-700 dark:text-slate-300"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Get Ticket</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">They select their desired service and receive a digital ticket with position.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center text-center reveal" style="transition-delay: 300ms;">
+                        <div class="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border-4 border-slate-50 dark:border-slate-900 shadow-xl flex items-center justify-center mb-6 relative">
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center">3</span>
+                            <i data-lucide="coffee" class="w-6 h-6 text-slate-700 dark:text-slate-300"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Enjoy Wait</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Customers are free to roam, grab a coffee, and track their status live via web.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flex flex-col items-center text-center reveal" style="transition-delay: 450ms;">
+                        <div class="w-16 h-16 rounded-full bg-white dark:bg-slate-800 border-4 border-slate-50 dark:border-slate-900 shadow-xl flex items-center justify-center mb-6 relative">
+                            <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center">4</span>
+                            <i data-lucide="check-circle" class="w-6 h-6 text-slate-700 dark:text-slate-300"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Get Served</h4>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">An automatic notification is sent when it's their turn to approach the counter.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo / Interactive Section -->
+    <section id="demo" class="py-24 bg-slate-900 dark:bg-slate-950 overflow-hidden relative">
+        <!-- Glow effects -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-brand-500/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Text Content -->
+                <div class="reveal">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Designed for the modern consumer.</h2>
+                    <p class="text-lg text-slate-400 mb-8 leading-relaxed">
+                        Say goodbye to physical pagers and confusing apps. Our mobile-first interface works perfectly in any browser, providing real-time updates and a beautifully fluid experience.
+                    </p>
+                    
+                    <ul class="space-y-6">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-500/20 flex items-center justify-center mt-1">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-400"></i>
+                            </div>
+                            <p class="ml-4 text-slate-300"><strong>No App Required:</strong> Works instantly via QR scan or URL link.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-500/20 flex items-center justify-center mt-1">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-400"></i>
+                            </div>
+                            <p class="ml-4 text-slate-300"><strong>Live Updates:</strong> Progress bar updates without page refresh.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-6 h-6 rounded-full bg-brand-500/20 flex items-center justify-center mt-1">
+                                <i data-lucide="check" class="w-4 h-4 text-brand-400"></i>
+                            </div>
+                            <p class="ml-4 text-slate-300"><strong>Custom Branding:</strong> Add your logo and brand colors to the UI.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Interactive App Mockup -->
+                <div class="flex justify-center lg:justify-end reveal" style="transition-delay: 200ms;">
+                    <!-- Phone Frame -->
+                    <div class="w-[320px] h-[640px] bg-slate-800 rounded-[3rem] p-3 shadow-2xl relative border-4 border-slate-700/50">
+                        <!-- Screen -->
+                        <div class="w-full h-full bg-slate-50 dark:bg-slate-900 rounded-[2.5rem] overflow-hidden relative flex flex-col no-scrollbar">
+                            <!-- Notch/Header -->
+                            <div class="w-full h-6 flex justify-center absolute top-0 z-20">
+                                <div class="w-32 h-6 bg-slate-800 rounded-b-xl"></div>
+                            </div>
+                            
+                            <!-- App Content -->
+                            <div class="flex-1 p-6 pt-12 overflow-y-auto no-scrollbar relative">
+                                <!-- Top Bar -->
+                                <div class="flex justify-between items-center mb-8">
+                                    <div class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center">
+                                        <i data-lucide="store" class="w-5 h-5 text-slate-700 dark:text-slate-300"></i>
+                                    </div>
+                                    <span class="text-xs font-semibold px-3 py-1 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-full">Live</span>
+                                </div>
+
+                                <div class="mb-2 text-slate-500 dark:text-slate-400 text-sm">Gourmet Burger Co.</div>
+                                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-8">Your Order Status</h3>
+
+                                <!-- Queue Card -->
+                                <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-none border border-slate-100 dark:border-slate-700 mb-6 relative overflow-hidden">
+                                    <!-- Animated Progress Background -->
+                                    <div class="absolute top-0 left-0 h-1 bg-slate-100 dark:bg-slate-700 w-full">
+                                        <div class="h-full bg-brand-500 w-[65%] rounded-r-full relative">
+                                            <div class="absolute top-0 right-0 bottom-0 left-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px] animate-[pulse_2s_linear_infinite]"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center mb-6 pt-2">
+                                        <div class="text-sm font-medium text-slate-500 dark:text-slate-400 mb-1">Position in line</div>
+                                        <div class="text-6xl font-black text-brand-600 dark:text-brand-400 mb-2 font-mono">04</div>
+                                        <div class="text-sm text-slate-600 dark:text-slate-300">Est. wait: <span class="font-bold">~12 mins</span></div>
+                                    </div>
+
+                                    <div class="space-y-4">
+                                        <div class="flex items-center gap-3 opacity-50">
+                                            <div class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                                                <i data-lucide="check" class="w-3 h-3 text-slate-400"></i>
+                                            </div>
+                                            <span class="text-sm text-slate-600 dark:text-slate-400 line-through">Order placed</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-6 h-6 rounded-full bg-brand-100 dark:bg-brand-900/50 flex items-center justify-center animate-pulse-slow">
+                                                <div class="w-2 h-2 rounded-full bg-brand-500"></div>
+                                            </div>
+                                            <span class="text-sm font-medium text-slate-900 dark:text-white">Preparing food...</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 opacity-50">
+                                            <div class="w-6 h-6 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                                                <div class="w-1.5 h-1.5 rounded-full bg-slate-300 dark:bg-slate-600"></div>
+                                            </div>
+                                            <span class="text-sm text-slate-500 dark:text-slate-500">Ready for pickup</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="grid grid-cols-2 gap-3">
+                                    <button class="py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-700 dark:text-slate-300 flex justify-center items-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+                                        <i data-lucide="menu-square" class="w-4 h-4"></i> Menu
+                                    </button>
+                                    <button class="py-3 px-4 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-medium text-red-600 dark:text-red-400 flex justify-center items-center gap-2 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                                        <i data-lucide="x-circle" class="w-4 h-4"></i> Cancel
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Home Indicator -->
+                            <div class="w-full h-1 bg-white dark:bg-slate-900 pb-2 flex justify-center mt-auto">
+                                <div class="w-32 h-1 bg-slate-300 dark:bg-slate-600 rounded-full"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-24 bg-white dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Trusted by modern businesses</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400">See how companies are transforming their customer experience.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 reveal">
+                    <div class="flex text-yellow-400 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    </div>
+                    <p class="text-slate-700 dark:text-slate-300 mb-8 line-clamp-4">"Implementing QueueFlow eliminated our chaotic lobby completely. Customers are happier, and our staff can actually focus on serving food rather than managing angry crowds."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold">SM</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-900 dark:text-white">Sarah Martinez</h5>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Manager, The Daily Roast</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 reveal" style="transition-delay: 100ms;">
+                    <div class="flex text-yellow-400 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    </div>
+                    <p class="text-slate-700 dark:text-slate-300 mb-8 line-clamp-4">"The API integration was incredibly smooth. We connected QueueFlow to our existing ticketing system in less than a day. The real-time analytics dashboard is a game changer for event ops."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold">JD</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-900 dark:text-white">James Doe</h5>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">CTO, EventTech Solutions</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 reveal" style="transition-delay: 200ms;">
+                    <div class="flex text-yellow-400 mb-6">
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                        <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                    </div>
+                    <p class="text-slate-700 dark:text-slate-300 mb-8 line-clamp-4">"Since using QueueFlow for our popup stores, our walk-away rate dropped by 40%. The SMS notifications when it's their turn means people keep shopping nearby instead of giving up."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-slate-600 dark:text-slate-300 font-bold">EL</div>
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-900 dark:text-white">Emma Lin</h5>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Retail Director, PopUp Co.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 bg-slate-50 dark:bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Simple, transparent pricing</h2>
+                <p class="text-lg text-slate-600 dark:text-slate-400">Start for free, scale as you grow. No hidden fees.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+                <!-- Free Plan -->
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm reveal">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Starter</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Perfect for small stalls and popups.</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-extrabold text-slate-900 dark:text-white">$0</span>
+                        <span class="text-slate-500 dark:text-slate-400">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> 1 Active Queue</li>
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> Up to 500 users/mo</li>
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> Basic Analytics</li>
+                        <li class="flex items-center text-slate-400 dark:text-slate-600 text-sm"><i data-lucide="x" class="w-4 h-4 mr-3"></i> SMS Notifications</li>
+                    </ul>
+                    <a href="#" class="block w-full py-3 px-4 text-center rounded-full font-medium border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition">Get Started</a>
+                </div>
+
+                <!-- Pro Plan (Highlighted) -->
+                <div class="bg-slate-900 dark:bg-slate-800 p-8 rounded-3xl border border-slate-800 dark:border-slate-700 shadow-xl transform md:-translate-y-4 relative reveal" style="transition-delay: 100ms;">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Most Popular</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Professional</h3>
+                    <p class="text-sm text-slate-400 mb-6">For growing businesses and events.</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-extrabold text-white">$49</span>
+                        <span class="text-slate-400">/mo</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-slate-200 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-400 mr-3"></i> Unlimited Queues</li>
+                        <li class="flex items-center text-slate-200 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-400 mr-3"></i> 10,000 users/mo</li>
+                        <li class="flex items-center text-slate-200 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-400 mr-3"></i> Advanced Analytics</li>
+                        <li class="flex items-center text-slate-200 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-400 mr-3"></i> SMS Notifications</li>
+                    </ul>
+                    <a href="#" class="block w-full py-3 px-4 text-center rounded-full font-medium bg-brand-500 text-white hover:bg-brand-600 shadow-md transition">Start Free Trial</a>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm reveal" style="transition-delay: 200ms;">
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Enterprise</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Custom solutions for large scale ops.</p>
+                    <div class="mb-6">
+                        <span class="text-4xl font-extrabold text-slate-900 dark:text-white">Custom</span>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> Unlimited Everything</li>
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> API Access & Webhooks</li>
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> White Labeling</li>
+                        <li class="flex items-center text-slate-700 dark:text-slate-300 text-sm"><i data-lucide="check" class="w-4 h-4 text-brand-500 mr-3"></i> 24/7 Priority Support</li>
+                    </ul>
+                    <a href="#" class="block w-full py-3 px-4 text-center rounded-full font-medium border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-900 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+                <!-- Brand -->
+                <div class="col-span-2 lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-6 h-6 rounded flex items-center justify-center bg-brand-500 text-white font-bold">
+                            <i data-lucide="layers" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-bold text-xl text-slate-900 dark:text-white tracking-tight">QueueFlow</span>
+                    </div>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 max-w-xs">
+                        Modernizing wait times and queue management for events, retail, and dining worldwide.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                        <a href="#" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition"><i data-lucide="github" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Product</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Features</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Pricing</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">API Documentation</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Integration</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Company</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">About Us</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Careers</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Blog</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4">Legal</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Terms of Service</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-slate-500 dark:text-slate-500">&copy; 2026 QueueFlow Inc. All rights reserved.</p>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span class="text-sm text-slate-500">All systems operational</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts.js" defer></script>
+</body>
+</html>
